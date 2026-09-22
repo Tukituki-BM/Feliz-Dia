@@ -1,0 +1,308 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fbe3ca 0%, #f9f0b3 40%, #f6ee9d 70%, #edd96f 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Destello de fondo */
+.glow-bg {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 1000px;
+  height: 1000px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255, 255, 210, 0.8) 0%, rgba(253, 245, 168, 0.45) 50%, rgba(0,0,0,0) 75%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Contenedores de partículas */
+#particles-container, #bokeh-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#particles-container { z-index: 10; }
+#bokeh-container { z-index: 2; }
+
+/* Efecto Bokeh */
+.bokeh {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 0 20px rgba(255, 255, 220, 0.9);
+  animation: floatUp 8s infinite ease-in-out;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) scale(0.8);
+    opacity: 0;
+  }
+  20% { opacity: 0.7; }
+  80% { opacity: 0.7; }
+  100% {
+    transform: translateY(-10vh) scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* Pétalos flotantes */
+.falling-petal {
+  position: absolute;
+  background: #f7d23d;
+  border-radius: 50% 0 50% 50%;
+  opacity: 0.75;
+  animation: fall 10s linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-20px) rotate(0deg) scale(0.8);
+    opacity: 0;
+  }
+  10% { opacity: 0.85; }
+  90% { opacity: 0.85; }
+  100% {
+    transform: translateY(105vh) rotate(360deg) scale(0.6);
+    opacity: 0;
+  }
+}
+
+/* Capa de Pasto / Césped en la Base */
+.grass-ground {
+  position: absolute;
+  bottom: -20px;
+  left: -5%;
+  width: 110%;
+  height: 65px;
+  background: linear-gradient(0deg, #516d2b 0%, #68823b 60%, rgba(104, 130, 59, 0) 100%);
+  border-radius: 50% 50% 0 0 / 20px 20px 0 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* Pradera y Jardín de Girasoles Pequeños */
+.garden-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 180px;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.garden-flower {
+  position: absolute;
+  bottom: -10px;
+  transform-origin: bottom center;
+  animation: swayFlower 4s ease-in-out infinite alternate;
+}
+
+@keyframes swayFlower {
+  from { transform: rotate(-3deg); }
+  to { transform: rotate(3deg); }
+}
+
+/* Contenedor principal del girasol */
+.flower-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  z-index: 5;
+  padding-bottom: 0;
+}
+
+svg#sunflowerSvg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+/* Estilos de tallo y hojas */
+.stem {
+  fill: none;
+  stroke: url(#stemGrad);
+  stroke-width: 17;
+  stroke-linecap: square;
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: growStem 2s ease-out forwards;
+}
+
+@keyframes growStem {
+  to { stroke-dashoffset: 0; }
+}
+
+.leaf {
+  fill: #6b883b;
+  opacity: 0;
+  transform-origin: center;
+  transition: all 0.5s ease;
+}
+
+.leaf-left {
+  animation: fadeInLeaf 1s ease-out 1.2s forwards;
+}
+
+.leaf-right {
+  animation: fadeInLeaf 1s ease-out 1.5s forwards;
+}
+
+@keyframes fadeInLeaf {
+  from { opacity: 0; transform: scale(0.3); }
+  to { opacity: 0.95; transform: scale(1); }
+}
+
+/* Pétalos principales */
+.petal {
+  fill: #fcd535;
+  stroke: #dfa312;
+  stroke-width: 1.2;
+  opacity: 0;
+  transform-origin: 0 0;
+  animation: bloomPetal 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.petal-mid {
+  fill: #fce055;
+  stroke: #e6b219;
+}
+
+.petal-inner {
+  fill: #ffeb77;
+  stroke: #ebd040;
+}
+
+@keyframes bloomPetal {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(var(--angle));
+  }
+  100% {
+    opacity: 0.96;
+    transform: scale(1) rotate(var(--angle));
+  }
+}
+
+/* Centro y semillas */
+.center-disc {
+  fill: url(#centerGrad);
+  opacity: 0;
+  animation: fadeInCenter 1s ease-out 0.8s forwards;
+  filter: drop-shadow(0px 6px 10px rgba(0, 0, 0, 0.35));
+}
+
+@keyframes fadeInCenter {
+  to { opacity: 1; }
+}
+
+.seed {
+  fill: #3a1a05;
+  opacity: 0.45;
+}
+
+/* Texto / Dedicatoria */
+.subtitle-box {
+  position: absolute;
+  bottom: 25px;
+  background: rgba(255, 255, 255, 0.82);
+  padding: 10px 24px;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  color: #5a4318;
+  font-style: italic;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  opacity: 0;
+  animation: fadeInText 1.5s ease-out 2.5s forwards;
+  text-align: center;
+  z-index: 20;
+  max-width: 90%;
+  pointer-events: none;
+}
+
+@keyframes fadeInText {
+  to { opacity: 1; }
+}
+
+/* Botón de Música */
+.music-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #4a3810;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.music-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: scale(1.05);
+}
+
+.music-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: #4a3810;
+}
+
+/* Adaptación para celulares */
+@media (max-width: 600px) {
+  .subtitle-box {
+    font-size: 0.85rem;
+    padding: 8px 18px;
+    bottom: 20px;
+  }
+
+  .garden-container {
+    height: 140px;
+  }
+
+  .grass-ground {
+    height: 50px;
+  }
+
+  .glow-bg {
+    width: 600px;
+    height: 600px;
+  }
+}
